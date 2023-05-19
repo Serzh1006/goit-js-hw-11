@@ -11,6 +11,7 @@ const btnShowMore = document.querySelector('.load-more');
 const gallery = document.querySelector('.gallery');
 let valueInput = '';
 let pageNumber = 0;
+let counter = 0;
 
 formEl.addEventListener('submit', onSubmitGetValue);
 
@@ -27,6 +28,7 @@ function onSubmitGetValue(e) {
       if (Obj.data.hits.length === 0) {
         throw new Error('error');
       } else {
+        counter += 40;
         Notify.info(`Hooray! We found ${Obj.data.totalHits} images.`);
         return createListImages(Obj.data.hits);
       }
@@ -47,10 +49,10 @@ btnShowMore.addEventListener('click', onClickShowMore);
 async function onClickShowMore() {
   pageNumber += 1;
   const objData = await getObjData(valueInput, pageNumber);
-  if (objData.data.hits.length !== 0) {
-    const newMarkup = await createListImages(objData.data.hits);
-    gallery.insertAdjacentHTML('beforeend', newMarkup);
-  } else {
+  const newMarkup = await createListImages(objData.data.hits);
+  gallery.insertAdjacentHTML('beforeend', newMarkup);
+  counter += objData.data.hits.length;
+  if (counter === objData.data.totalHits) {
     Notify.info("We're sorry, but you've reached the end of search results.");
     btnShowMore.classList.add('load-more');
   }
