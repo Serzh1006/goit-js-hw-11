@@ -4,9 +4,9 @@ export function createListImages(arrayImages) {
   const list = arrayImages
     .map(obj => {
       return `<li class="gallery__item">
+			<a class="gallery__link" href="${obj.largeImageURL}">
 			<div class="photo-card">
-  <a class="gallery__link" href="${obj.largeImageURL}">
-	<img src="${obj.webformatURL}" alt="${obj.tags}" width="320" loading="lazy" /></a>
+	<img src="${obj.webformatURL}" alt="${obj.tags}" width="320" loading="lazy" />
   <div class="info">
     <p class="info-item">
       Likes:<b>${obj.likes}</b>
@@ -21,7 +21,7 @@ export function createListImages(arrayImages) {
       Downloads:<b>${obj.downloads}</b>
     </p>
   </div>
-</div></li>`;
+</div></a></li>`;
     })
     .join('');
   return `<ul>${list}</ul>`;
