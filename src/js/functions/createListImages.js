@@ -1,7 +1,7 @@
 // ф-ция для создания коллекции фоток
 
 export function createListImages(arrayImages) {
-  const list = arrayImages
+  const newmarkup = arrayImages
     .map(obj => {
       return `<li class="gallery__item">
 			<a class="gallery__link" href="${obj.largeImageURL}">
@@ -24,5 +24,5 @@ export function createListImages(arrayImages) {
 </div></a></li>`;
     })
     .join('');
-  return `<ul>${list}</ul>`;
+  return `<ul class="gallery__list">${newmarkup}</ul>`;
 }

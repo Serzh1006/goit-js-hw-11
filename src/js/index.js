@@ -8,15 +8,20 @@ import { addMarkUp } from './functions/addMarkUp';
 
 const formEl = document.getElementById('search-form');
 const btnShowMore = document.querySelector('.load-more');
+const gallery = document.querySelector('.gallery');
+let valueInput = '';
 let pageNumber = 0;
 
 formEl.addEventListener('submit', onSubmitGetValue);
 
 function onSubmitGetValue(e) {
   e.preventDefault();
-  const valueInput = e.currentTarget.firstElementChild.value.trim();
+  if (!btnShowMore.classList.contains('load-more')) {
+    btnShowMore.classList.add('load-more');
+  }
+  valueInput = e.currentTarget.firstElementChild.value.trim();
   formEl.reset();
-  pageNumber = 2;
+  pageNumber = 1;
   getObjData(valueInput, pageNumber)
     .then(Obj => {
       if (Obj.data.hits.length === 0) {
@@ -28,14 +33,27 @@ function onSubmitGetValue(e) {
     })
     .then(markup => {
       addMarkUp(markup);
-      btnShowMore.classList.toggle('load-more');
-      // продумать появление кнопки при сабмите
+      btnShowMore.classList.remove('load-more');
     })
     .catch(() =>
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       )
     );
+}
+
+btnShowMore.addEventListener('click', onClickShowMore);
+
+async function onClickShowMore() {
+  pageNumber += 1;
+  const objData = await getObjData(valueInput, pageNumber);
+  if (objData.data.hits.length !== 0) {
+    const newMarkup = await createListImages(objData.data.hits);
+    gallery.insertAdjacentHTML('beforeend', newMarkup);
+  } else {
+    Notify.info("We're sorry, but you've reached the end of search results.");
+    btnShowMore.classList.add('load-more');
+  }
 }
 
 // Создание слайдера
