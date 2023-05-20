@@ -12,6 +12,7 @@ const gallery = document.querySelector('.gallery');
 let valueInput = '';
 let pageNumber = 0;
 let counter = 0;
+let total = 0;
 
 formEl.addEventListener('submit', onSubmitGetValue);
 
@@ -26,22 +27,27 @@ function onSubmitGetValue(e) {
   getObjData(valueInput, pageNumber)
     .then(Obj => {
       if (Obj.data.hits.length === 0) {
+        addMarkUp('');
         throw new Error('error');
       } else {
-        counter += 40;
+        counter = Obj.data.hits.length;
+        total = Obj.data.totalHits;
         Notify.info(`Hooray! We found ${Obj.data.totalHits} images.`);
         return createListImages(Obj.data.hits);
       }
     })
     .then(markup => {
       addMarkUp(markup);
-      btnShowMore.classList.remove('load-more');
+      if (counter < total) {
+        btnShowMore.classList.remove('load-more');
+      }
     })
-    .catch(() =>
+    .catch(error => {
+      console.log(error.message);
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
-      )
-    );
+      );
+    });
 }
 
 btnShowMore.addEventListener('click', onClickShowMore);
@@ -52,7 +58,7 @@ async function onClickShowMore() {
   const newMarkup = await createListImages(objData.data.hits);
   gallery.insertAdjacentHTML('beforeend', newMarkup);
   counter += objData.data.hits.length;
-  if (counter === objData.data.totalHits) {
+  if (counter >= total) {
     Notify.info("We're sorry, but you've reached the end of search results.");
     btnShowMore.classList.add('load-more');
   }
@@ -60,7 +66,7 @@ async function onClickShowMore() {
 
 // Создание слайдера
 
-// const gallery = new SimpleLightbox('.gallery a', {
+// const mygallery = new SimpleLightbox('.gallery a', {
 //   captionsData: 'alt',
 //   captionPosition: 'bottom',
 //   captionDelay: 250,

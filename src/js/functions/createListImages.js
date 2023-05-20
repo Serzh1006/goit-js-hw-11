@@ -1,10 +1,9 @@
 // ф-ция для создания коллекции фоток
 
 export function createListImages(arrayImages) {
-  const newmarkup = arrayImages
+  return arrayImages
     .map(obj => {
-      return `<li class="gallery__item">
-			<a class="gallery__link" href="${obj.largeImageURL}">
+      return `<a class="gallery__link" href="${obj.largeImageURL}">
 			<div class="photo-card">
 	<img src="${obj.webformatURL}" alt="${obj.tags}" width="320" loading="lazy" />
   <div class="info">
@@ -21,8 +20,7 @@ export function createListImages(arrayImages) {
       Downloads:<b>${obj.downloads}</b>
     </p>
   </div>
-</div></a></li>`;
+</div></a>`;
     })
     .join('');
-  return `<ul class="gallery__list">${newmarkup}</ul>`;
 }
