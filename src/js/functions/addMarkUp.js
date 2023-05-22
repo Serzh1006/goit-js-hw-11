@@ -1,5 +1,5 @@
-const gallery = document.querySelector('.gallery');
+import { refs } from '../refs';
 
 export function addMarkUp(markup) {
-  gallery.innerHTML = markup;
+  refs.gallery.innerHTML = markup;
 }

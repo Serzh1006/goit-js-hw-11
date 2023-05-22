@@ -5,24 +5,27 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { getObjData } from './functions/getObjData';
 import { createListImages } from './functions/createListImages';
 import { addMarkUp } from './functions/addMarkUp';
+import { refs } from './refs';
 
-const formEl = document.getElementById('search-form');
-const btnShowMore = document.querySelector('.load-more');
-const gallery = document.querySelector('.gallery');
 let valueInput = '';
 let pageNumber = 0;
 let counter = 0;
 let total = 0;
 
-formEl.addEventListener('submit', onSubmitGetValue);
+refs.formEl.addEventListener('submit', onSubmitGetValue);
 
 function onSubmitGetValue(e) {
   e.preventDefault();
-  if (!btnShowMore.classList.contains('load-more')) {
-    btnShowMore.classList.add('load-more');
+  if (!refs.btnShowMore.classList.contains('is-headen')) {
+    refs.btnShowMore.classList.add('is-headen');
   }
+
   valueInput = e.currentTarget.firstElementChild.value.trim();
-  formEl.reset();
+  if (valueInput === '') {
+    Notify.warning('Введите данные в поле поиска');
+    return;
+  }
+  refs.formEl.reset();
   pageNumber = 1;
   getObjData(valueInput, pageNumber)
     .then(Obj => {
@@ -32,14 +35,14 @@ function onSubmitGetValue(e) {
       } else {
         counter = Obj.data.hits.length;
         total = Obj.data.totalHits;
-        Notify.info(`Hooray! We found ${Obj.data.totalHits} images.`);
+        Notify.success(`Hooray! We found ${Obj.data.totalHits} images.`);
         return createListImages(Obj.data.hits);
       }
     })
     .then(markup => {
       addMarkUp(markup);
       if (counter < total) {
-        btnShowMore.classList.remove('load-more');
+        refs.btnShowMore.classList.remove('is-headen');
       }
     })
     .catch(error => {
@@ -50,24 +53,24 @@ function onSubmitGetValue(e) {
     });
 }
 
-btnShowMore.addEventListener('click', onClickShowMore);
+refs.btnShowMore.addEventListener('click', onClickShowMore);
 
 async function onClickShowMore() {
   pageNumber += 1;
   const objData = await getObjData(valueInput, pageNumber);
   const newMarkup = await createListImages(objData.data.hits);
-  gallery.insertAdjacentHTML('beforeend', newMarkup);
+  refs.gallery.insertAdjacentHTML('beforeend', newMarkup);
   counter += objData.data.hits.length;
   if (counter >= total) {
     Notify.info("We're sorry, but you've reached the end of search results.");
-    btnShowMore.classList.add('load-more');
+    refs.btnShowMore.classList.add('is-headen');
   }
 }
 
 // Создание слайдера
 
-// const mygallery = new SimpleLightbox('.gallery a', {
-//   captionsData: 'alt',
-//   captionPosition: 'bottom',
-//   captionDelay: 250,
-// });
+const gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
