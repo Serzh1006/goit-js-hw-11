@@ -81,3 +81,32 @@ b {
 .is-headen {
   display: none;
 }
+
+.search-form {
+  text-align: center;
+  background-color: rgba(25, 25, 99, 0.356);
+  height: 31px;
+  padding-top: 6px;
+}
+
+.search-form input {
+  border: 1px solid green;
+  border-radius: 3px;
+  padding: 4px 0 3px 7px;
+}
+
+.search-form button {
+  font-family: fantasy;
+  font-size: 14px;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 10px;
+  letter-spacing: 1.8px;
+  color: rgba(255, 255, 255, 0.733);
+  background-color: rgb(28, 4, 95);
+  cursor: pointer;
+}
+.search-form button:hover,
+.search-form button:focus {
+  color: rgb(201, 201, 6);
+}
