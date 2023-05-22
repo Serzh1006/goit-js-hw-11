@@ -1,11 +1,9 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
-import { getObjData } from './functions/getObjData';
-import { createListImages } from './functions/createListImages';
-import { addMarkUp } from './functions/addMarkUp';
+import { getObjData } from './getObjData';
+import { createListImages } from './createListImages';
+import { addMarkUp } from './addMarkUp';
 import { refs } from './refs';
+import { gallery } from './initializationSlider';
 
 let valueInput = '';
 let pageNumber = 0;
@@ -41,6 +39,7 @@ function onSubmitGetValue(e) {
     })
     .then(markup => {
       addMarkUp(markup);
+      gallery.refresh();
       if (counter < total) {
         refs.btnShowMore.classList.remove('is-headen');
       }
@@ -60,17 +59,10 @@ async function onClickShowMore() {
   const objData = await getObjData(valueInput, pageNumber);
   const newMarkup = await createListImages(objData.data.hits);
   refs.gallery.insertAdjacentHTML('beforeend', newMarkup);
+  gallery.refresh();
   counter += objData.data.hits.length;
   if (counter >= total) {
     Notify.info("We're sorry, but you've reached the end of search results.");
     refs.btnShowMore.classList.add('is-headen');
   }
 }
-
-// Создание слайдера
-
-const gallery = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});

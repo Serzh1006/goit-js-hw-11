@@ -1,4 +1,6 @@
 body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
   background-color: blanchedalmond;
 }
 
@@ -13,13 +15,23 @@ p {
   margin: 0;
 }
 
+.header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: 100%;
+  background-color: rgba(25, 25, 99, 0.356);
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
   row-gap: 60px;
   column-gap: 30px;
   justify-content: center;
-  margin-top: 25px;
+  margin-top: 50px;
   margin-bottom: 70px;
 }
 
@@ -38,7 +50,6 @@ b {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: fantasy;
   font-size: 13px;
   color: black;
 }
@@ -54,16 +65,17 @@ b {
 }
 
 .load-more {
+  font-family: inherit;
+  font-weight: 700;
   display: block;
   margin: 0 auto;
   padding: 7px 15px 7px 15px;
   cursor: pointer;
   background-color: rgb(28, 4, 95);
   border: none;
-  font-family: fantasy;
   font-size: 20px;
   border-radius: 3px;
-  letter-spacing: 2.1px;
+  letter-spacing: 1px;
   color: rgba(255, 255, 255, 0.733);
   box-shadow: 5px 5px 10px rgb(93, 93, 179);
   transition-property: box-shadow, color;
@@ -84,7 +96,6 @@ b {
 
 .search-form {
   text-align: center;
-  background-color: rgba(25, 25, 99, 0.356);
   height: 31px;
   padding-top: 6px;
 }
@@ -96,12 +107,13 @@ b {
 }
 
 .search-form button {
-  font-family: fantasy;
-  font-size: 14px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15px;
   border: none;
   border-radius: 3px;
   padding: 2px 10px;
-  letter-spacing: 1.8px;
+  letter-spacing: 1px;
   color: rgba(255, 255, 255, 0.733);
   background-color: rgb(28, 4, 95);
   cursor: pointer;
