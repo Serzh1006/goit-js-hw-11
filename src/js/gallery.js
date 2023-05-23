@@ -9,10 +9,12 @@ let valueInput = '';
 let pageNumber = 0;
 let counter = 0;
 let total = 0;
+let Obj = '';
+let markup = '';
 
 refs.formEl.addEventListener('submit', onSubmitGetValue);
 
-function onSubmitGetValue(e) {
+async function onSubmitGetValue(e) {
   e.preventDefault();
   if (!refs.btnShowMore.classList.contains('is-headen')) {
     refs.btnShowMore.classList.add('is-headen');
@@ -21,35 +23,29 @@ function onSubmitGetValue(e) {
   valueInput = e.currentTarget.firstElementChild.value.trim();
   if (valueInput === '') {
     Notify.warning('Введите данные в поле поиска');
+    refs.formEl.reset();
     return;
   }
   refs.formEl.reset();
   pageNumber = 1;
-  getObjData(valueInput, pageNumber)
-    .then(Obj => {
-      if (Obj.data.hits.length === 0) {
-        addMarkUp('');
-        throw new Error('error');
-      } else {
-        counter = Obj.data.hits.length;
-        total = Obj.data.totalHits;
-        Notify.success(`Hooray! We found ${Obj.data.totalHits} images.`);
-        return createListImages(Obj.data.hits);
-      }
-    })
-    .then(markup => {
-      addMarkUp(markup);
-      gallery.refresh();
-      if (counter < total) {
-        refs.btnShowMore.classList.remove('is-headen');
-      }
-    })
-    .catch(error => {
-      console.log(error.message);
-      Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    });
+  Obj = await getObjData(valueInput, pageNumber);
+  if (Obj.data.hits.length === 0) {
+    addMarkUp('');
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  } else {
+    counter = Obj.data.hits.length;
+    total = Obj.data.totalHits;
+    Notify.success(`Hooray! We found ${Obj.data.totalHits} images.`);
+    markup = await createListImages(Obj.data.hits);
+  }
+  addMarkUp(markup);
+  gallery.refresh();
+  if (counter < total) {
+    refs.btnShowMore.classList.remove('is-headen');
+  }
 }
 
 refs.btnShowMore.addEventListener('click', onClickShowMore);
